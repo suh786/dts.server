@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Text;
+using dts.server.Commons;
 
 namespace dts.server.host
 {
@@ -13,14 +14,25 @@ namespace dts.server.host
 
         static void Main(string[] args)
         {
+            var serviceLocator = new ServiceLocator();
+            var service = new RegistrationService(serviceLocator);
+            
             // Create the ServiceHost.
-            using (ServiceHost host = new ServiceHost(typeof(RegistrationService), baseAddress))
+            using (var host = new ServiceHost(service, baseAddress))
             {
                 // Enable metadata publishing.
                 ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
                 smb.HttpGetEnabled = true;
                 smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
                 host.Description.Behaviors.Add(smb);
+                var endpoint = new ServiceEndpoint(new ContractDescription("IRegistrationService"));
+                WSDualHttpBinding binding = new WSDualHttpBinding();
+                EndpointAddress endptadr = new EndpointAddress("http://localhost:3030/RegistrationService");
+                binding.ClientBaseAddress = new Uri("http://localhost:3030/RegistrationService/Client/");
+                endpoint.Binding = binding;
+                endpoint.Address = endptadr;
+
+                host.AddServiceEndpoint(endpoint);
 
                 // Open the ServiceHost to start listening for messages. Since
                 // no endpoints are explicitly configured, the runtime will create
