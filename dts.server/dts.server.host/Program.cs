@@ -21,18 +21,12 @@ namespace dts.server.host
             using (var host = new ServiceHost(service, baseAddress))
             {
                 // Enable metadata publishing.
-                ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
+                var smb = new ServiceMetadataBehavior();
                 smb.HttpGetEnabled = true;
                 smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
                 host.Description.Behaviors.Add(smb);
-                var endpoint = new ServiceEndpoint(new ContractDescription("IRegistrationService"));
-                WSDualHttpBinding binding = new WSDualHttpBinding();
-                EndpointAddress endptadr = new EndpointAddress("http://localhost:3030/RegistrationService");
-                binding.ClientBaseAddress = new Uri("http://localhost:3030/RegistrationService/Client/");
-                endpoint.Binding = binding;
-                endpoint.Address = endptadr;
 
-                host.AddServiceEndpoint(endpoint);
+                host.AddServiceEndpoint(typeof (IRegistrationService), new WSDualHttpBinding(), baseAddress);
 
                 // Open the ServiceHost to start listening for messages. Since
                 // no endpoints are explicitly configured, the runtime will create
