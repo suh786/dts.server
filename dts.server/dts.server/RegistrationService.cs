@@ -14,15 +14,14 @@ namespace dts.server
     public class RegistrationService : IRegistrationService
     {
         private readonly IServiceLocator _serviceLocator;
-        private readonly Dictionary<string, IRecordServiceCallback> _recordServiceCallbacks;
-        private volatile bool send;
+        private readonly Dictionary<string, TaskRunner> _recordServiceCallbacks;
 
         public RegistrationService()
         {
-            
+            _recordServiceCallbacks = new Dictionary<string, TaskRunner>();
         }
 
-        public RegistrationService(IServiceLocator serviceLocator)
+        public RegistrationService(IServiceLocator serviceLocator) : this()
         {
             _serviceLocator = serviceLocator;
         }
@@ -31,29 +30,17 @@ namespace dts.server
 
         public bool Subscribe(string username)
         {
-            //if(_recordServiceCallbacks.ContainsKey(username)) return false;
-            send = true;
-            var callback = OperationContext.Current.GetCallbackChannel<IRecordServiceCallback>();
+            if(_recordServiceCallbacks.ContainsKey(username)) return false;
             
-            if(_timer == null)
-                _timer = new Timer((x) => SendRecords(callback), null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
-
+            var callback = OperationContext.Current.GetCallbackChannel<IRecordServiceCallback>();
+            _recordServiceCallbacks[username] = new TaskRunner(callback);
+            _recordServiceCallbacks[username].Start();
+            
             return true;
         }
-        int i = 1;
-        private Timer _timer;
-
-        private void SendRecords(IRecordServiceCallback callback)
-        {
-            if(send) 
-                callback.RecordAdded(i.ToString(), new string[0]);
-            i++;
-            
-        }
-
+        
         public bool Unsubscribe(string username)
         {
-            Task.Factory.StartNew(() => send = false);
             return false;
         }
 
