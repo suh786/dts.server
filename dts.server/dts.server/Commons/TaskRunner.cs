@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace dts.server.Commons
@@ -13,6 +15,8 @@ namespace dts.server.Commons
         private const string filePath = "Persons.txt";
         private ConcurrentQueue<Person> _outputQueue;
         private volatile bool _isFinishedReading;
+        private CancellationTokenSource _taskCancellationTokenSource;
+
         public TaskRunner(IRecordServiceCallback callback)
         {
             RecordServiceCallback = callback;
@@ -23,13 +27,14 @@ namespace dts.server.Commons
 
         public void Start()
         {
-            var taskRead = Task.Factory.StartNew(() => ReadAndStartBlockPrcoessor());
-            var taskPublish = Task.Factory.StartNew(() => PublishPersons());
+            _taskCancellationTokenSource = new CancellationTokenSource();
+            Task.Factory.StartNew(() => ReadAndStartBlockPrcoessor());
+            Task.Factory.StartNew(() => PublishPersons());
         }
 
         private void PublishPersons()
         {
-            while(!_isFinishedReading && !_outputQueue.IsEmpty)
+            while(!_isFinishedReading || !_outputQueue.IsEmpty)
             {
                 Person person;
                 _outputQueue.TryDequeue(out person);
@@ -41,12 +46,14 @@ namespace dts.server.Commons
         {
             using(var file = new StreamReader(filePath))
             {
+                Debug.WriteLine(file.ToString());
                 var lines = new List<string>();
                 
                 while(!file.EndOfStream)
                 {
                     if(lines.Count == 100)
                     {
+                        Debug.WriteLine("Starting block processor");
                         StartBlockProcessor(lines);
                         lines.Clear();
                     }

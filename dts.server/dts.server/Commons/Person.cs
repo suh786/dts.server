@@ -9,15 +9,25 @@ namespace dts.server.Commons
     [DataContract]
     public class Person
     {
+        [DataMember]
         public string Id { get; set; }
+        [DataMember]
         public string FirstName { get; set; }
+        [DataMember]
         public string MiddleName { get; set; }
+        [DataMember]
         public string LastName { get; set; }
+        [DataMember]
         public string Address { get; set; }
+        [DataMember]
         public int Age { get; set; }
+        [DataMember]
         public string FatherName { get; set; }
+        [DataMember]
         public string MotherName { get; set; }
+        [DataMember]
         public string OfficeName { get; set; }
+        [DataMember]
         public string OfficeAddress { get; set; }
 
         public override string ToString()

@@ -41,7 +41,11 @@ namespace dts.server
         
         public bool Unsubscribe(string username)
         {
-            return false;
+            if(!_recordServiceCallbacks.ContainsKey(username)) return false;
+
+            _recordServiceCallbacks.Remove(username);
+
+            return true;
         }
 
         #endregion
