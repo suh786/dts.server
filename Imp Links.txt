@@ -1,2 +1,5 @@
 Pub-Sub WCF Service
 http://www.anujvarma.com/series/wcf-publish-subscribe-c/
+
+Task Parellerlism
+http://blogs.msdn.com/b/csharpfaq/archive/2010/08/12/blocking-collection-and-the-producer-consumer-problem.aspx
