@@ -10,23 +10,25 @@ namespace dts.server.host
 {
     class Program
     {
-        private static Uri baseAddress = new Uri("http://localhost:3030/RegistrationService");
+        private static Uri baseAddress = new Uri("http://localhost:3030/PersonSubscriptionService");
 
         static void Main(string[] args)
         {
-            var serviceLocator = new ServiceLocator();
-            var service = new RegistrationService(serviceLocator);
+            //var serviceLocator = new ServiceLocator();
+            var service = new PersonSubscriptionService();
             
             // Create the ServiceHost.
-            using (var host = new ServiceHost(service, baseAddress))
+            using (var host = new ServiceHost(typeof(PersonSubscriptionService), baseAddress))
             {
                 // Enable metadata publishing.
-                var smb = new ServiceMetadataBehavior();
-                smb.HttpGetEnabled = true;
-                smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
+                var smb = new ServiceMetadataBehavior
+                              {
+                                  HttpGetEnabled = true, MetadataExporter = {PolicyVersion = PolicyVersion.Policy15}
+                              };
+
                 host.Description.Behaviors.Add(smb);
 
-                host.AddServiceEndpoint(typeof (IRegistrationService), new WSDualHttpBinding(), baseAddress);
+                host.AddServiceEndpoint(typeof (IPersonSubscriptionService), new WSDualHttpBinding(), baseAddress);
 
                 // Open the ServiceHost to start listening for messages. Since
                 // no endpoints are explicitly configured, the runtime will create

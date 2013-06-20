@@ -7,7 +7,7 @@ using dts.server.Commons;
 
 namespace dts.server
 {
-    public interface IRecordServiceCallback
+    public interface IPersonServiceCallback
     {
         [OperationContract(IsOneWay = true)]
         void RecordAdded(Person record);

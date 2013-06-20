@@ -8,14 +8,14 @@ using System.Text;
 namespace dts.server
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
-    [ServiceContract(CallbackContract = typeof(IRecordServiceCallback))]
-    public interface IRegistrationService
+    [ServiceContract(CallbackContract = typeof(IPersonServiceCallback), SessionMode = SessionMode.Required)]
+    public interface IPersonSubscriptionService
     {
         [OperationContract]
-        bool Subscribe(string username);
+        bool Subscribe();
 
         [OperationContract]
-        bool Unsubscribe(string username);
+        bool Unsubscribe();
 
         // TODO: Add your service operations here
     }

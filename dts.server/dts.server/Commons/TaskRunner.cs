@@ -17,19 +17,21 @@ namespace dts.server.Commons
         private volatile bool _isFinishedReading;
         private CancellationTokenSource _taskCancellationTokenSource;
 
-        public TaskRunner(IRecordServiceCallback callback)
+        public TaskRunner(IPersonServiceCallback callback)
         {
-            RecordServiceCallback = callback;
+            PersonServiceCallback = callback;
             _outputQueue = new ConcurrentQueue<Person>();
         }
 
-        public IRecordServiceCallback RecordServiceCallback { get; private set; }
+        public IPersonServiceCallback PersonServiceCallback { get; private set; }
 
         public void Start()
         {
             _taskCancellationTokenSource = new CancellationTokenSource();
-            Task.Factory.StartNew(() => ReadAndStartBlockPrcoessor());
+            //Task.Factory.StartNew(() => ReadAndStartBlockPrcoessor());
             Task.Factory.StartNew(() => PublishPersons());
+            ReadAndStartBlockPrcoessor();
+            
         }
 
         private void PublishPersons()
@@ -37,8 +39,11 @@ namespace dts.server.Commons
             while(!_isFinishedReading || !_outputQueue.IsEmpty)
             {
                 Person person;
-                _outputQueue.TryDequeue(out person);
-                RecordServiceCallback.RecordAdded(person);
+                if (_outputQueue.TryDequeue(out person))
+                {
+                    Debug.WriteLine("Sending person: " + person.ToString());
+                    PersonServiceCallback.RecordAdded(person);
+                }
             }
         }
 

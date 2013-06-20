@@ -47,10 +47,10 @@
     <Compile Include="Commons\IServiceLocator.cs" />
     <Compile Include="Commons\Person.cs" />
     <Compile Include="Commons\TaskRunner.cs" />
-    <Compile Include="IRecordServiceCallback.cs" />
-    <Compile Include="IRegistrationService.cs" />
+    <Compile Include="IPersonServiceCallback.cs" />
+    <Compile Include="IPersonSubscriptionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegistrationService.cs" />
+    <Compile Include="PersonSubscriptionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
