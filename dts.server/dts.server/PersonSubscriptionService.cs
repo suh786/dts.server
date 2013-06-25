@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using dts.server.Commons;
+using dts.server.PersonModel;
 
 namespace dts.server
 {
@@ -15,11 +16,11 @@ namespace dts.server
     public class PersonSubscriptionService : IPersonSubscriptionService
     {
         private readonly IServiceLocator _serviceLocator;
-        private readonly Dictionary<string, TaskRunner> _taskRunners;
+        private readonly Dictionary<string, DtsTaskRunner> _taskRunners;
 
         public PersonSubscriptionService()
         {
-            _taskRunners = new Dictionary<string, TaskRunner>();
+            _taskRunners = new Dictionary<string, DtsTaskRunner>();
         }
 
         #region IRegistrationService Members
@@ -27,7 +28,7 @@ namespace dts.server
         public bool Subscribe()
         {
             var callback = OperationContext.Current.GetCallbackChannel<IPersonServiceCallback>();
-            var runner = new TaskRunner(callback);
+            var runner = new DtsTaskRunner(new DtsTask(SourceType.File, "Persons.txt", TargetType.Callback, new PersonCallbackTarget(callback)));
             var subscriberId = Guid.NewGuid().ToString();
             Debug.WriteLine("Subscriber registerd: " + subscriberId);
 

@@ -7,7 +7,7 @@ using System.Text;
 namespace dts.server.Commons
 {
     [DataContract]
-    public class Person
+    public class Person : IRowRecord
     {
         [DataMember]
         public string Id { get; set; }
@@ -46,5 +46,20 @@ namespace dts.server.Commons
                                  OfficeName,
                                  OfficeAddress);
         }
+        
+    }
+
+    public enum PersonFields
+    {
+        Id = 0,
+        FirstName,
+        MiddleName,
+        LastName,
+        Address,
+        Age,
+        FatherName,
+        MotherName,
+        OfficeName,
+        OfficeAddress
     }
 }
