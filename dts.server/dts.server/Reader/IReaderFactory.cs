@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using dts.server.BlockProcessing;
@@ -14,6 +15,7 @@ namespace dts.server.Reader
         IReader Create(SourceType sourceType, string sourceName, BlockingCollection<Block> outputQueue);
     }
 
+    [Export(typeof(IReaderFactory))]
     public class ReaderFactory : IReaderFactory
     {
         public IReader Create(SourceType sourceType, string sourceName, BlockingCollection<Block> outputQueue)

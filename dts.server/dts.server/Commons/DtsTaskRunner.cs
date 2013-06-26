@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,16 +14,23 @@ using dts.server.Reader;
 
 namespace dts.server.Commons
 {
+    /// <summary>
+    /// Always start TaskRunner is a worker thread.
+    /// </summary>
     internal class DtsTaskRunner
     {
         private readonly DtsTask _task;
+        [Import]
         private IOutputWriterFactory _outputWriterFactory;
+        [Import]
         private IReaderFactory _readerFactory; 
-        private BlockingCollection<Block> _outputQueue;
+        private readonly BlockingCollection<Block> _outputQueue;
 
         public DtsTaskRunner(DtsTask task)
         {
             _task = task;
+            _outputQueue = new BlockingCollection<Block>();
+            SystemManager.InjectServices(this);
         }
 
         public void Start()

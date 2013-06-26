@@ -33,7 +33,7 @@ namespace dts.server
             Debug.WriteLine("Subscriber registerd: " + subscriberId);
 
             _taskRunners.Add(subscriberId, runner);
-            runner.Start();
+            Task.Factory.StartNew(runner.Start);
             return true;
         }
         

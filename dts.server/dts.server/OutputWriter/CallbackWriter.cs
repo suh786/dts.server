@@ -21,10 +21,14 @@ namespace dts.server.OutputWriter
 
         public void Write()
         {
+            Console.WriteLine(DateTime.Now.ToLongTimeString() + "Callback writer started.");
+
             foreach (var block in _outputQueue.GetConsumingEnumerable())
             {
                 SendRecords(block.OutputRecords);
             }
+
+            Console.WriteLine(DateTime.Now.ToLongTimeString() + "Callback writer finished writing.");
         }
 
         private void SendRecords(IEnumerable<IRowRecord> outputRecords)

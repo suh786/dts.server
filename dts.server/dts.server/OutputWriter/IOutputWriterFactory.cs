@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.ComponentModel.Composition;
 using dts.server.BlockProcessing;
 using dts.server.Commons;
 
@@ -10,6 +11,7 @@ namespace dts.server.OutputWriter
         IOutputWriter Create(TargetType targetType, BlockingCollection<Block> outputQueue, ITarget target);
     }
 
+    [Export(typeof(IOutputWriterFactory))]
     public class OutputWriterFactory : IOutputWriterFactory
     {
         #region IOutputWriterFactory Members

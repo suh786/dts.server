@@ -13,7 +13,7 @@ namespace dts.server.Commons
         void Execute();
     }
 
-    public class TaskExecutor
+    public class TaskExecutor : ITaskExecutor
     {
         private readonly IReader _reader;
         private readonly IOutputWriter _outputWriter;
