@@ -13,43 +13,34 @@ namespace dts.server.BlockProcessing
         /// Process a block per processor in a seperate thread.
         /// </summary>
         /// <param name="block"></param>
-        void Process(Block block);
+        Task Process(Block block);
     }
 
     public class BlockProcessor : DisposebleObject, IBlockProcessor
     {
         private readonly BlockingCollection<Block> _outputQueue;
-        private readonly CountdownEvent _completionSignal;
 
-        public BlockProcessor(BlockingCollection<Block> outputQueue, CountdownEvent completionSignal)
+        public BlockProcessor(BlockingCollection<Block> outputQueue)
         {
             _outputQueue = outputQueue;
-            _completionSignal = completionSignal;
         }
 
-        public void Process(Block block)
+        public Task Process(Block block)
         {
             var blockToProcess = block;
-            Task.Factory.StartNew(() => ProcessBlock(blockToProcess));
+            return Task.Factory.StartNew(() => ProcessBlock(blockToProcess));
         }
 
         private void ProcessBlock(Block block)
         {
-            try
+            foreach (var inputRecord in block.InputRecords)
             {
-                foreach (var inputRecord in block.InputRecords)
-                {
-                    //apply transformations here
+                //apply transformations here
 
-                    block.OutputRecords.Add(inputRecord);
-                }
+                block.OutputRecords.Add(inputRecord);
+            }
 
-                _outputQueue.Add(block);
-            }
-            finally
-            {
-                _completionSignal.Signal();
-            }
+            _outputQueue.Add(block);
         }
     }
 }

@@ -71,6 +71,7 @@
     <Compile Include="OutputWriter\IOutputWriter.cs" />
     <Compile Include="OutputWriter\IOutputWriterFactory.cs" />
     <Compile Include="Reader\IReaderFactory.cs" />
+    <Compile Include="Reader\ReaderBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

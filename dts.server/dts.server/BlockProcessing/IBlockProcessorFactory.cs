@@ -11,15 +11,15 @@ namespace dts.server.BlockProcessing
 {
     public interface IBlockProcessorFactory
     {
-        IBlockProcessor Create(BlockingCollection<Block> outputQueue, CountdownEvent completionSignal);
+        IBlockProcessor Create(BlockingCollection<Block> outputQueue);
     }
 
     [Export(typeof(IBlockProcessorFactory))]
     public class BlockProcessorFactory : IBlockProcessorFactory
     {
-        public IBlockProcessor Create(BlockingCollection<Block> outputQueue, CountdownEvent completionSignal)
+        public IBlockProcessor Create(BlockingCollection<Block> outputQueue)
         {
-            return new BlockProcessor(outputQueue, completionSignal);
+            return new BlockProcessor(outputQueue);
         }
     }
 }

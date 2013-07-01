@@ -7,8 +7,8 @@ namespace dts.server.Commons
 {
     public interface ITarget
     {
-        void AddRecord(IRowRecord record);
-        void UpdateRecord(IRowRecord record);
-        void DeleteRecord(string id);
+        void AddRecords(IEnumerable<IRowRecord> records);
+        void UpdateRecords(IEnumerable<IRowRecord> records);
+        void DeleteRecords(IEnumerable<string> ids);
     }
 }

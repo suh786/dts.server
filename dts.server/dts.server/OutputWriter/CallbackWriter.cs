@@ -33,10 +33,7 @@ namespace dts.server.OutputWriter
 
         private void SendRecords(IEnumerable<IRowRecord> outputRecords)
         {
-            foreach (var outputRecord in outputRecords)
-            {
-                _callback.AddRecord(outputRecord);
-            }
+           _callback.AddRecords(outputRecords);
         }
 
         protected override void DisposeInternal()

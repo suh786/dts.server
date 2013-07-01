@@ -15,17 +15,17 @@ namespace dts.server.PersonModel
             _callback = callback;
         }
 
-        public void AddRecord(IRowRecord record)
+        public void AddRecords(IEnumerable<IRowRecord> records)
         {
-            _callback.RecordAdded((Person)record);
+            _callback.RecordsAdded(records.Cast<Person>().ToArray());
         }
 
-        public void UpdateRecord(IRowRecord record)
+        public void UpdateRecords(IEnumerable<IRowRecord> records)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteRecord(string id)
+        public void DeleteRecords(IEnumerable<string> ids)
         {
             throw new NotImplementedException();
         }

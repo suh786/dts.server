@@ -8,6 +8,9 @@ namespace dts.server.Reader
 {
     public interface IReader
     {
+        /// <summary>
+        /// Whole read operation should be done on a single thread.
+        /// </summary>
         void Read();
     }
 }

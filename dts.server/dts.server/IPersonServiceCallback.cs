@@ -10,6 +10,6 @@ namespace dts.server
     public interface IPersonServiceCallback
     {
         [OperationContract(IsOneWay = true)]
-        void RecordAdded(Person record);
+        void RecordsAdded(Person[] records);
     }
 }
